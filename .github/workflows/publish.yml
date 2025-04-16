@@ -1,0 +1,68 @@
+name: Promote Drafts and Generate Blog
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  promote-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Move drafts to posts
+        run: |
+          mkdir -p posts
+          for mdfile in $(find drafts -name index.md); do
+            mv "$mdfile" "posts/index.md"
+          done
+          rm -rf drafts
+      - name: Install pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+
+      - name: Convert Markdown to HTML
+        run: |
+          for file in posts/*.md; do
+            base=$(basename "$file" .md)
+            title=$(head -1 "$file" | sed 's/^# //')
+            pandoc "$file" \
+              --from markdown \
+              --to html5 \
+              --metadata title="$title" \
+              --template=.theme/post_template.html \
+              -o "posts/$base.html"
+          done
+
+      - name: Generate blog index
+        run: |
+          cp .theme/index.html index.html
+          links=""
+          for file in posts/*.md; do
+            title=$(head -1 "$file" | sed 's/^# //')
+            base=$(basename "$file" .md)
+            links+="<li><a href='posts/$base.html'>$title</a></li>\\n"
+          done
+          awk -v links="$links" '
+            /<!-- BLOG-LIST -->/ {
+              print "<!-- BLOG-LIST -->"
+              print links
+              next
+            }
+            { print }
+          ' index.html > index.tmp && mv index.tmp index.html
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add posts index.html
+          git commit -m "chore: promote drafts and regenerate blog index" || echo "Nothing to commit"
+          git push origin main
