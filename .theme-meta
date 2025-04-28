@@ -1,0 +1,10 @@
+{
+  "name": "Dark List",
+  "slug": "dark-list",
+  "description": "Minimal dark theme with vertical blog listing.",
+  "layout": "list",
+  "color_scheme": "dark",
+  "author": "Blog Agent AI",
+  "preview_url": "/themes/dark-list/preview.png",
+  "version": "1.0"
+}
