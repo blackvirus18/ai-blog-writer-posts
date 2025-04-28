@@ -31,7 +31,6 @@ So next time you see a Transformer model working late into the night, remember: 
 
 
 
-Stay curious, and keep learning! 🚀🧪
-
+Edited
 
 
