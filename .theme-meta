@@ -1,10 +1,10 @@
 {
-  "name": "Dark List",
-  "slug": "dark-list",
-  "description": "Minimal dark theme with vertical blog listing.",
-  "layout": "list",
-  "color_scheme": "dark",
+  "name": "Light Columnar",
+  "slug": "light-columnar",
+  "description": "Elegant light theme with 2-column layout and clean typography.",
+  "layout": "columnar",
+  "color_scheme": "light",
   "author": "Blog Agent AI",
-  "preview_url": "/themes/dark-list/preview.png",
+  "preview_url": "/themes/light-columnar/preview.png",
   "version": "1.0"
 }
