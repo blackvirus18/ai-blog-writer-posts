@@ -1,0 +1,46 @@
+schema_version: "1"
+name: "ai-blog-writer"
+description: "An agent that generates, saves, and publishes blog posts using LLMs and GitHub workflows."
+
+visibility: public
+
+inputs:
+  - name: topic
+    type: string
+    description: "The topic of the blog post"
+  - name: tone
+    type: string
+    description: "Tone of the blog (e.g. educational, casual, technical)"
+    required: false
+  - name: filename
+    type: string
+    description: "Optional filename for the blog post"
+    required: false
+
+output:
+  type: object
+  properties:
+    blog_title:
+      type: string
+    draft_file:
+      type: string
+    pull_request_url:
+      type: string
+    summary:
+      type: string
+
+actions:
+  - name: generate_blog_post
+    description: "Generate and save a blog post based on the topic and tone."
+    parameters:
+      - topic
+      - tone
+      - filename
+    run:
+      method: POST
+      url: https://your-domain.com/api/mcp/generate_blog_post
+
+context_requirements:
+  - repo_contents
+  - pull_requests
+  - branches
